@@ -8,7 +8,7 @@ class Model {
         this.board = [0, 0, 0,
             0, 0, 0,
             0, 0, 0];
-        this.possibleWins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [3, 4, 6]];
+        this.possibleWins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
         this.endGame = false;
     }
     setTitle(x) {
@@ -56,9 +56,9 @@ class View {
         this.body = document.body;
 
     }
-    render(data) {
+    render(data, fn) {
         console.log(data)
-        
+
         this.titleContainer = document.createElement("div");
         this.titleContainer.id = "titleContainer"
         this.board = document.createElement("div");
@@ -75,7 +75,7 @@ class View {
         this.titleDisplay.innerText = data.title;
         this.titleContainer.appendChild(this.titleDisplay)
         this.scoreDisplay = document.createElement("div");
-        
+
         this.scoreDisplay = document.createElement("h1");
         this.scoreDisplay.innerText = `Score X: ${data.scoreX}`
         this.scoreContainer.appendChild(this.scoreDisplay)
@@ -84,12 +84,13 @@ class View {
         this.scoreDisplay.innerText = `Score O: ${data.scoreO}`
         this.scoreContainer.appendChild(this.scoreDisplay)
         this.scoreDisplay = document.createElement("div");
-        // Create Tiles
+        // Tiles
         for (let i = 0; i < 9; i++) {
             let tile = document.createElement('button')
             tile.classList = `tile`
-            tile.addEventListener('click', (e) => { console.log(e.target); e.target.disabled = true; e.target.innerText = "X" })
-            board.prepend(tile)
+            tile.id = `tile${i}`
+            tile.addEventListener('click', (e) => { e.target.disabled = true; e.target.innerText = "X"; fn(e.target.id) })
+            board.append(tile)
         }
     }
 
@@ -106,9 +107,28 @@ class Controller {
 
     init = () => {
         console.log("page loaded");
-        this.v.render(this.m);
+        this.v.render(this.m, this.updateBoard);
     }
+    updateBoard = (x) => {
+        let pos = x.charAt(x.length - 1)
+        console.log(pos);
+        this.m.board[pos] = 'X';
+        console.log(this.m.board);
+        this.checkForWin(this.m.possibleWins, this.m.board);
+    }
+    checkForWin = (possible, current) => {
+        for (let i = 0; i < possible.length; i++) { //For Every array in possibleWins
+            let positions = possible[i]
+            if (
+                current[positions[0]] && // Check the value at the index given by the possibleWins for true/false
+                current[positions[0]] === current[positions[1]] && // If the rest of the three numbers are true, run gameWin
+                current[positions[0]] === current[positions[2]]
+            ) {
 
+                console.log("GAME WON!!!")
+            }
+        }
+    }
 }
 /* 
 ## `tileClick`
