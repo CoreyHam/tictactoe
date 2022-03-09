@@ -1,19 +1,18 @@
 // Check for a win
 
 const possibleWins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [3, 4, 6]]
-const boardTiles = [0, -1, 0, 0, 1, 0, 0, 1, 0]
+const boardTiles = [0, "x", 0, 0, "x", 0, 0, "x", 0]
 
 function checkForWin(possible, current) {
-    for (let i = 0; i < possible.length; i++) {
+    for (let i = 0; i < possible.length; i++) { //For Every array in possibleWins
         positions = possible[i]
-        let count = 0
-        for (let j = 0; j < positions.length; j++) {
-            if (current[positions[j]]) {
-                count++;   
-            }
-            if(count == 3){
-                console.log("GAME WON!!!")
-            }
+        if(
+            current[positions[0]] && // Check the value at the index given by the possibleWins for true/false
+            current[positions[0]]===current[positions[1]] && // If the rest of the three numbers are true, run gameWin
+            current[positions[0]] === current[positions[2]]
+        ){
+
+            console.log("GAME WON!!!")
         }
     }
 }
