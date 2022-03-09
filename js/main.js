@@ -1,87 +1,103 @@
 // Model
 class Model {
-    constructor(){
+    constructor() {
         this.title = "Tic Tac Toe";
         this.score = 0;
-        this.turn = true;
-        this.board = [0,0,0,
-                      0,0,0,
-                      0,0,0];
+        this.turn = "X's Turn";
+        this.board = [0, 0, 0,
+            0, 0, 0,
+            0, 0, 0];
         this.possibleWins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [3, 4, 6]];
         this.endGame = false;
     }
-    setTitle(x){
+    setTitle(x) {
         this.title = x;
     }
-    getTitle(){
+    getTitle() {
         return this.title;
     }
-    setScore(x){
+    setScore(x) {
         this.score = x;
     }
-    getScore(){
+    getScore() {
         return this.score;
     }
-    setTurn(x){
+    setTurn(x) {
         this.turn = x;
     }
-    getTurn(){
+    getTurn() {
         return this.turn;
     }
-    setBoard(x){
+    setBoard(x) {
         this.board = x;
     }
-    getBoard(){
+    getBoard() {
         return this.board;
     }
-    setPossibleWins(x){
+    setPossibleWins(x) {
         this.possibleWins = x;
     }
-    getPossibleWins(){
+    getPossibleWins() {
         return this.possibleWins;
     }
-    setEndGame(x){
+    setEndGame(x) {
         this.endGame = x;
     }
-    getEndGame(){
+    getEndGame() {
         return this.endGame;
     }
 }
 
 // View
 class View {
-    constructor(){
+    constructor() {
         // all of the get element by id's
-        this.button = document.getElementById('button')
-        this.body = document.body
-        this.titleDisplay = document.createElement("h1")
-        this.scoreDisplay = document.createElement("div")
-        this.boardDisplay = document.createElement("button")
+        this.body = document.body;
+
+    }
+    render(data) {
+        console.log(data)
+        this.board = document.createElement("div");
+        this.board.id = "board"
+        this.board.classList = 'board'
+        this.scoreContainer = document.createElement("div");
+        this.scoreContainer.id = "scoreContainer"
+        this.boardContainer = document.createElement("div");
+        this.boardContainer.id = "boardContainer"
+
+        this.body.appendChild(this.board)
+        this.body.appendChild(this.scoreContainer)
+        this.body.appendChild(this.boardContainer)
+
+        this.titleDisplay = document.createElement("h1");
+        this.scoreDisplay = document.createElement("div");
+        this.boardDisplay = document.createElement("button");
+        
+        // Create Tiles
+        for (let i = 0; i < 9; i++) {
+            let tile = document.createElement('button')
+            tile.classList = `tile`
+            tile.addEventListener('click', (e) => { console.log(e.target); e.target.disabled = true })
+            board.prepend(tile)
+        }
     }
 
-    init=(fn)=>{
-        this.body.addEventListener("load", fn)
-    } 
 }
 
 // Controller
 class Controller {
-    constructor(){
-        this.m = new Model()
-        this.v = new View()
-        this.v.init(this.pageLoad)
+    constructor() {
+        this.m = new Model();
+        this.v = new View();
+        // this.init(this.pageLoad)
         // any view functions will go here, like button clicks
     }
-    init=()=>{
-        console.log("page loaded")
-    }
-    pageLoad=()=>{
-        console.log("Clicked!")
-        this.titleDisplay = document.createElement("h1");
-        this.v.body.appendChild(this.titleDisplay)
 
+    init = () => {
+        console.log("page loaded");
+        this.v.render(this.m);
     }
-    
+
 }
 /* 
 ## `tileClick`
@@ -107,9 +123,9 @@ For every array in `possibleWins`, check the value at the index given by the `po
  for true/false. If all three numbers are true, AND have the same value, run `endGame`
 */
 
-function init() { 
-    let game = new Controller();
-    game.init();
+function globalInit() {
+    let app = new Controller();
+    app.init();
 }
 
-init();
+globalInit();

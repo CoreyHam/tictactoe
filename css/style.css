@@ -1,0 +1,14 @@
+.board{
+    max-width: 900px;
+}
+
+.tile{
+    width: 300px;
+    height: 300px;
+}
+.tile:enabled{
+    background-color: white;
+}
+.tile:disabled{
+    background-color: black;
+}
