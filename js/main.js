@@ -2,7 +2,8 @@
 class Model {
     constructor() {
         this.title = "Tic Tac Toe";
-        this.score = 0;
+        this.scoreX = 0;
+        this.scoreO = 0;
         this.turn = "X's Turn";
         this.board = [0, 0, 0,
             0, 0, 0,
@@ -57,27 +58,37 @@ class View {
     }
     render(data) {
         console.log(data)
+        
+        this.titleContainer = document.createElement("div");
+        this.titleContainer.id = "titleContainer"
         this.board = document.createElement("div");
         this.board.id = "board"
         this.board.classList = 'board'
         this.scoreContainer = document.createElement("div");
         this.scoreContainer.id = "scoreContainer"
-        this.boardContainer = document.createElement("div");
-        this.boardContainer.id = "boardContainer"
 
-        this.body.appendChild(this.board)
+        this.body.appendChild(this.titleContainer)
         this.body.appendChild(this.scoreContainer)
-        this.body.appendChild(this.boardContainer)
+        this.body.appendChild(this.board)
 
         this.titleDisplay = document.createElement("h1");
+        this.titleDisplay.innerText = data.title;
+        this.titleContainer.appendChild(this.titleDisplay)
         this.scoreDisplay = document.createElement("div");
-        this.boardDisplay = document.createElement("button");
         
+        this.scoreDisplay = document.createElement("h1");
+        this.scoreDisplay.innerText = `Score X: ${data.scoreX}`
+        this.scoreContainer.appendChild(this.scoreDisplay)
+        this.scoreDisplay = document.createElement("div");
+        this.scoreDisplay = document.createElement("h1");
+        this.scoreDisplay.innerText = `Score O: ${data.scoreO}`
+        this.scoreContainer.appendChild(this.scoreDisplay)
+        this.scoreDisplay = document.createElement("div");
         // Create Tiles
         for (let i = 0; i < 9; i++) {
             let tile = document.createElement('button')
             tile.classList = `tile`
-            tile.addEventListener('click', (e) => { console.log(e.target); e.target.disabled = true })
+            tile.addEventListener('click', (e) => { console.log(e.target); e.target.disabled = true; e.target.innerText = "X" })
             board.prepend(tile)
         }
     }

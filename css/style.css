@@ -1,5 +1,9 @@
 .board{
-    max-width: 900px;
+    width: 900px;
+    height: 900px;
+    display: flex;
+    flex-flow: row wrap;
+    
 }
 
 .tile{
@@ -7,8 +11,9 @@
     height: 300px;
 }
 .tile:enabled{
-    background-color: white;
+    background-color: white;   
 }
 .tile:disabled{
     background-color: black;
+    color: white;
 }
