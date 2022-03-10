@@ -62,106 +62,106 @@ class Model {
 // View
 class View {
     constructor() {
-        // all of the get element by id's
-        this.body = document.body;
-
+        this.app = document.createElement("div")
+        this.app.id = "app"
+        document.body.appendChild(this.app)
     }
-    render(data, fn, turnSwitch, resetGame, addGame, reset, gameEnd) {
-        console.log("RENDERING")
-        if (gameEnd != true) {
-
-            if (reset) {
-                this.body.innerHTML = ''
-            }
-            this.titleContainer = document.createElement("div");
-            this.titleContainer.id = "titleContainer"
-
-            this.board = document.createElement("div");
-            this.board.id = "board"
-            this.board.classList = 'board'
-
-            this.scoreContainer = document.createElement("div");
-            this.scoreContainer.id = "scoreContainer"
-
-            this.resetContainer = document.createElement("div");
-            this.resetContainer.id = "resetContainer"
-
-            this.body.appendChild(this.titleContainer)
-            this.body.appendChild(this.scoreContainer)
-            this.body.appendChild(this.board)
-            this.body.appendChild(this.resetContainer)
-
-            this.titleDisplay = document.createElement("h1");
-            this.titleDisplay.innerText = data.getTitle();
-            this.titleContainer.appendChild(this.titleDisplay)
-            this.scoreDisplay = document.createElement("div");
-
-            this.scoreDisplay = document.createElement("h1");
-            this.scoreDisplay.innerText = `Score X: ${data.getScoreX()}`
-            this.scoreContainer.appendChild(this.scoreDisplay)
-            this.scoreDisplay = document.createElement("div");
-            this.scoreDisplay = document.createElement("h1");
-            this.scoreDisplay.innerText = `Score O: ${data.getScoreO()}`
-            this.scoreContainer.appendChild(this.scoreDisplay)
-            this.scoreDisplay = document.createElement("div");
-            this.updateTurn(data);
-
-            // Tiles
-            for (let i = 0; i < 9; i++) {
-                let tile = document.createElement('button')
-                tile.classList = `tile`
-                tile.id = `tile${i}`
-                tile.addEventListener('click', (e) => { e.target.disabled = true; e.target.innerText = data.getTurn(); fn(e.target.id); turnSwitch() })
-
-                this.board.append(tile)
-            }
-            this.resetDisplay = document.createElement("button");
-            this.resetDisplay.innerText = "RESET";
-            this.resetDisplay.addEventListener('click', () => { resetGame() });
-            this.resetContainer.appendChild(this.resetDisplay)
-            this.scoreDisplay = document.createElement("div");
-
-            // this.resetDisplay = document.createElement("button");
-            // this.resetDisplay.innerText = "ADD";
-            // this.resetDisplay.addEventListener('click', () => { addGame() });
-            // this.resetContainer.appendChild(this.resetDisplay)
-            // this.scoreDisplay = document.createElement("div");
+    render(data, tileHandler, gameReset) {
+        for(let property in data){ //Create all needed containers for each property on Model until possibleWins
+            if(property==='board'){break}
+            let div = document.createElement("div")
+            div.id = `${property}Container`
+            this.app.appendChild(div)
+        }
+        //title
+        this.titleDisplay = document.createElement('h1')
+        this.titleDisplay.innerText = data.getTitle()
+        this.titleContainer = document.getElementById('titleContainer')
+        this.titleContainer.appendChild(this.titleDisplay)
+        //scoreX
+        this.scoreXDisplay = document.createElement('h1')
+        this.scoreXDisplay.innerText = `X: ${data.getScoreX()}`
+        this.scoreXContainer = document.getElementById('scoreXContainer')
+        this.scoreXContainer.appendChild(this.scoreXDisplay)
+        //scoreO
+        this.scoreODisplay = document.createElement('h1')
+        this.scoreODisplay.innerText = `O: ${data.getScoreO()}`
+        this.scoreOContainer = document.getElementById('scoreOContainer')
+        this.scoreOContainer.appendChild(this.scoreODisplay)
+        //turn
+        this.turnDisplay = document.createElement('h1')
+        this.turnDisplay.innerText = `${data.getTurn()}'s turn`
+        this.turnContainer = document.getElementById('turnContainer')
+        this.turnContainer.appendChild(this.turnDisplay)
+        //board
+        this.board = document.createElement('div');
+        this.board.id = "board"
+        this,this.board.classList = "board"
+        this.app.appendChild(this.board)
+        this.tileBuilder(tileHandler)
+        //reset
+        this.resetButton = document.createElement('button');
+        this.resetButton.id = "resetButton"
+        this.resetButton.innerText = "RESET"
+        this.resetButton.addEventListener('click', gameReset)
+        this.app.appendChild(this.resetButton)
+    }
+    reset=()=> {
+        console.log("RESETTING", this.app)
+        while (this.app.firstChild) {
+            this.app.removeChild(this.app.firstChild);
+        } 
+    }
+    updateView(data){
+        this.titleDisplay.innerText = data.getTitle()
+        this.scoreXDisplay.innerText = `X: ${data.getScoreX()}`
+        this.scoreODisplay.innerText = `O: ${data.getScoreO()}`
+        data.getEndGame() ? this.turnDisplay.innerText = `GAME OVER` : this.turnDisplay.innerText = `${data.getTurn()}'s turn`
+            
+    }
+    tileBuilder(tileHandler){
+        for (let i = 0; i < 9; i++) {
+            let tile = document.createElement('button')
+            tile.classList = `tile`
+            tile.id = `tile${i}`
+            tile.addEventListener('click', tileHandler)
+            this.board.append(tile)
         }
     }
-
     tileLock = () => {
-
         let tile = document.getElementsByClassName('tile')
         for (let i = 0; i < tile.length; i++) {
             tile[i].disabled = true
         }
-        console.log(tile)
     }
-    updateTurn = (data) => {
-        this.turnDisplay = document.createElement('h1');
-        this.turnDisplay.innerText = data.getTurn();
-        this.scoreContainer.appendChild(this.turnDisplay);
-    }
-
 }
 
-// Controller
 class Controller {
     constructor() {
         this.m = new Model();
         this.v = new View();
-        // this.init(this.pageLoad)
-        // any view functions will go here, like button clicks
     }
-
-    init = () => {
-        console.log("page loaded");
-        this.v.render(this.m, this.updateBoard, this.turnSwitch, this.resetGame, this.addGame);
+    init(){
+        console.log("Initialized")
+        this.v.render(this.m, this.tileHandler, this.gameReset)
     }
-    updateBoard = (x) => {
-        let pos = x.charAt(x.length - 1)
+    tileHandler=(e)=>{
+        e.target.disabled = true
+        e.target.innerText = this.m.getTurn()
+        this.updateBoard(e.target.id)
+        this.turnSwitch()
+    }
+    turnSwitch = () => {
+        if (this.m.getTurn() === "X") {
+            this.m.setTurn("O")
+        } else {
+            this.m.setTurn("X")
+        }
+        this.v.updateView(this.m);
+    }
+    updateBoard = (tileId) => {
+        let pos = tileId.charAt(tileId.length - 1)
         this.m.getBoard()[pos] = this.m.getTurn();
-        // console.log(this.m.board);
         this.checkForWin(this.m.getPossibleWins(), this.m.getBoard());
     }
     checkForWin = (possible, current) => {
@@ -172,42 +172,46 @@ class Controller {
                 current[positions[0]] === current[positions[1]] && // If the rest of the three numbers are true, run gameWin
                 current[positions[0]] === current[positions[2]]
             ) {
-
-
-                this.gameEnd()
+                this.gameEnd('win')
+            }
+        }
+        let count = 0;
+        for(let i=0;i < current.length;i++){
+            if(current[i]){
+                count++
+            }
+            if(count == 9){
+                this.gameEnd('tie')
             }
         }
     }
-    turnSwitch = () => {
-        // console.log("what is get turn doing?", this.m.getTurn())
-        if (this.m.getTurn() === "X") {
-            this.m.setTurn("O")
-            // console.log(this.m.turn)
-        } else {
-            this.m.setTurn("X")
-        }
-        this.v.updateTurn(this.m);
-    }
-    resetGame = () => {
-        this.m.resetGame(globalInit);
-        this.v.render(this.m, this.updateBoard, this.turnSwitch, this.resetGame, this.addGame, "reset");
-
-    }
-
-    addGame = () => {
-        globalInit();
-    }
-
-    gameEnd = () => {
+    gameEnd = (condition) => {
         this.m.setEndGame(true)
         this.v.tileLock()
-        console.log("GAME WON!!!")
+        if(condition == 'win'){
+            this.m.setTitle(`PLAYER ${this.m.getTurn()} WINS`)
+            this.m.getTurn() == 'X' ? this.m.setScoreX(this.m.getScoreX()+1) : this.m.setScoreO(this.m.getScoreO()+1)
+            
+        }
+        if(condition == 'tie'){
+            this.m.setTitle(`TIE GAME`)
+        }
+        this.v.updateView(this.m)
+    }
+    gameReset = ()=>{
+        this.v.reset()
+        this.init()
+        this.m.setTitle("Tic Tac Toe")
+        this.m.setTurn("X")
+        this.m.setBoard([0, 0, 0, 0, 0, 0, 0, 0, 0])
+        this.m.setEndGame(false)
+        this.v.updateView(this.m)
     }
 }
+
 
 function globalInit() {
     let app = new Controller();
     app.init();
 }
-
 globalInit();

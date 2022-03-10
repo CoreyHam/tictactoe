@@ -1,4 +1,6 @@
 .board{
+    background-color: rgb(82, 12, 12);
+    padding: 10px;
     width: 900px;
     height: 900px;
     display: flex;
