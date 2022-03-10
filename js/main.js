@@ -75,11 +75,14 @@ class View {
             }
             this.titleContainer = document.createElement("div");
             this.titleContainer.id = "titleContainer"
+
             this.board = document.createElement("div");
             this.board.id = "board"
             this.board.classList = 'board'
+
             this.scoreContainer = document.createElement("div");
             this.scoreContainer.id = "scoreContainer"
+
             this.resetContainer = document.createElement("div");
             this.resetContainer.id = "resetContainer"
 
@@ -101,6 +104,8 @@ class View {
             this.scoreDisplay.innerText = `Score O: ${data.getScoreO()}`
             this.scoreContainer.appendChild(this.scoreDisplay)
             this.scoreDisplay = document.createElement("div");
+            this.updateTurn(data);
+
             // Tiles
             for (let i = 0; i < 9; i++) {
                 let tile = document.createElement('button')
@@ -123,13 +128,19 @@ class View {
             // this.scoreDisplay = document.createElement("div");
         }
     }
-    tileLock=()=>{
-        
+
+    tileLock = () => {
+
         let tile = document.getElementsByClassName('tile')
-        for(let i=0; i<tile.length;i++){
+        for (let i = 0; i < tile.length; i++) {
             tile[i].disabled = true
         }
         console.log(tile)
+    }
+    updateTurn = (data) => {
+        this.turnDisplay = document.createElement('h1');
+        this.turnDisplay.innerText = data.getTurn();
+        this.scoreContainer.appendChild(this.turnDisplay);
     }
 
 }
@@ -175,6 +186,7 @@ class Controller {
         } else {
             this.m.setTurn("X")
         }
+        this.v.updateTurn(this.m);
     }
     resetGame = () => {
         this.m.resetGame(globalInit);
