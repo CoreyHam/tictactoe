@@ -8,6 +8,7 @@ class Model {
         this.board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
         this.possibleWins = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
         this.endGame = false;
+        this.currentPlayer = 'Human';
     }
     setTitle(x) {
         this.title = x;
@@ -126,6 +127,7 @@ class View {
             let tile = document.createElement('button')
             tile.classList = `tile`
             tile.id = `tile${i}`
+            tile.dataset.num = i;
             tile.addEventListener('click', tileHandler)
             this.board.append(tile)
         }
@@ -148,9 +150,11 @@ class Controller {
         this.v.render(this.m, this.tileHandler, this.gameReset)
     }
     tileHandler=(e)=>{
+        console.log(e.target)
         e.target.disabled = true
         e.target.innerText = this.m.getTurn()
         this.updateBoard(e.target.id)
+        this.AIMove()
         this.turnSwitch()
     }
     turnSwitch = () => {
@@ -208,6 +212,23 @@ class Controller {
         this.m.setBoard([0, 0, 0, 0, 0, 0, 0, 0, 0])
         this.m.setEndGame(false)
         this.v.updateView(this.m)
+    }
+    AIMove=()=>{
+        let arrCopy = this.m.getBoard()
+        let stored = []
+        let possibleMoves = arrCopy;
+        console.log("ARRCOPY", arrCopy)
+        for(let i=0; i<this.m.getBoard().length;i++){
+            console.log("ARRCOPY INDEX", arrCopy[i])
+            if(arrCopy[i]){
+                stored.push(i)
+                console.log("stored: ", stored)
+                for(let j=stored.length-1;j>0;j--){
+                    console.log("num", stored[j])
+
+                }
+            }
+        }
     }
 }
 
