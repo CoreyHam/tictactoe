@@ -68,8 +68,8 @@ class View {
     }
     render(data, fn, turnSwitch, resetGame, addGame, reset, gameEnd) {
         console.log("RENDERING")
-        if(gameEnd != true){
-            
+        if (gameEnd != true) {
+
             if (reset) {
                 this.body.innerHTML = ''
             }
@@ -82,50 +82,48 @@ class View {
             this.scoreContainer.id = "scoreContainer"
             this.resetContainer = document.createElement("div");
             this.resetContainer.id = "resetContainer"
-            
+
             this.body.appendChild(this.titleContainer)
             this.body.appendChild(this.scoreContainer)
             this.body.appendChild(this.board)
             this.body.appendChild(this.resetContainer)
-            
+
             this.titleDisplay = document.createElement("h1");
             this.titleDisplay.innerText = data.getTitle();
             this.titleContainer.appendChild(this.titleDisplay)
             this.scoreDisplay = document.createElement("div");
-            
+
             this.scoreDisplay = document.createElement("h1");
             this.scoreDisplay.innerText = `Score X: ${data.getScoreX()}`
             this.scoreContainer.appendChild(this.scoreDisplay)
             this.scoreDisplay = document.createElement("div");
-        this.scoreDisplay = document.createElement("h1");
-        this.scoreDisplay.innerText = `Score O: ${data.getScoreO()}`
-        this.scoreContainer.appendChild(this.scoreDisplay)
-        this.scoreDisplay = document.createElement("div");
-        // Tiles
-        for (let i = 0; i < 9; i++) {
-            let tile = document.createElement('button')
-            tile.classList = `tile`
-            tile.id = `tile${i}`
-            console.log(data.getEndGame())
-            
-            tile.addEventListener('click', (e) => { e.target.disabled = true; e.target.innerText = data.getTurn(); fn(e.target.id); turnSwitch() })
-            
-            this.board.append(tile)
+            this.scoreDisplay = document.createElement("h1");
+            this.scoreDisplay.innerText = `Score O: ${data.getScoreO()}`
+            this.scoreContainer.appendChild(this.scoreDisplay)
+            this.scoreDisplay = document.createElement("div");
+            // Tiles
+            for (let i = 0; i < 9; i++) {
+                let tile = document.createElement('button')
+                tile.classList = `tile`
+                tile.id = `tile${i}`
+                tile.addEventListener('click', (e) => { e.target.disabled = true; e.target.innerText = data.getTurn(); fn(e.target.id); turnSwitch() })
+
+                this.board.append(tile)
+            }
+            this.resetDisplay = document.createElement("button");
+            this.resetDisplay.innerText = "RESET";
+            this.resetDisplay.addEventListener('click', () => { resetGame() });
+            this.resetContainer.appendChild(this.resetDisplay)
+            this.scoreDisplay = document.createElement("div");
+
+            this.resetDisplay = document.createElement("button");
+            this.resetDisplay.innerText = "ADD";
+            this.resetDisplay.addEventListener('click', () => { addGame() });
+            this.resetContainer.appendChild(this.resetDisplay)
+            this.scoreDisplay = document.createElement("div");
         }
-        this.resetDisplay = document.createElement("button");
-        this.resetDisplay.innerText = "RESET";
-        this.resetDisplay.addEventListener('click', () => { resetGame() });
-        this.resetContainer.appendChild(this.resetDisplay)
-        this.scoreDisplay = document.createElement("div");
-        
-        this.resetDisplay = document.createElement("button");
-        this.resetDisplay.innerText = "ADD";
-        this.resetDisplay.addEventListener('click', () => { addGame() });
-        this.resetContainer.appendChild(this.resetDisplay)
-        this.scoreDisplay = document.createElement("div");
     }
-    }
-    
+
 }
 
 // Controller
@@ -182,7 +180,9 @@ class Controller {
 
     gameEnd = () => {
         this.m.setEndGame(true)
-        this.v.render(this.m, this.updateBoard, this.turnSwitch, this.resetGame, this.addGame, "reset", "gameEnd")
+        for(this.v.tile in this.v.board){
+            this.v.tile.disabled
+        }
         console.log("GAME WON!!!")
     }
 }
