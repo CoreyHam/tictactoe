@@ -116,12 +116,20 @@ class View {
             this.resetContainer.appendChild(this.resetDisplay)
             this.scoreDisplay = document.createElement("div");
 
-            this.resetDisplay = document.createElement("button");
-            this.resetDisplay.innerText = "ADD";
-            this.resetDisplay.addEventListener('click', () => { addGame() });
-            this.resetContainer.appendChild(this.resetDisplay)
-            this.scoreDisplay = document.createElement("div");
+            // this.resetDisplay = document.createElement("button");
+            // this.resetDisplay.innerText = "ADD";
+            // this.resetDisplay.addEventListener('click', () => { addGame() });
+            // this.resetContainer.appendChild(this.resetDisplay)
+            // this.scoreDisplay = document.createElement("div");
         }
+    }
+    tileLock=()=>{
+        
+        let tile = document.getElementsByClassName('tile')
+        for(let i=0; i<tile.length;i++){
+            tile[i].disabled = true
+        }
+        console.log(tile)
     }
 
 }
@@ -180,9 +188,7 @@ class Controller {
 
     gameEnd = () => {
         this.m.setEndGame(true)
-        for(this.v.tile in this.v.board){
-            this.v.tile.disabled
-        }
+        this.v.tileLock()
         console.log("GAME WON!!!")
     }
 }
