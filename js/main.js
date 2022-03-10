@@ -75,6 +75,7 @@ class View {
         }
         //title
         this.titleDisplay = document.createElement('h1')
+        this.titleDisplay.classList = "title"
         this.titleDisplay.innerText = data.getTitle()
         this.titleContainer = document.getElementById('titleContainer')
         this.titleContainer.appendChild(this.titleDisplay)
@@ -86,10 +87,11 @@ class View {
         //scoreO
         this.scoreODisplay = document.createElement('h1')
         this.scoreODisplay.innerText = `O: ${data.getScoreO()}`
-        this.scoreOContainer = document.getElementById('scoreOContainer')
+        this.scoreOContainer = document.getElementById('scoreXContainer')
         this.scoreOContainer.appendChild(this.scoreODisplay)
         //turn
         this.turnDisplay = document.createElement('h1')
+        this.turnDisplay.classList = 'turn' 
         this.turnDisplay.innerText = `${data.getTurn()}'s turn`
         this.turnContainer = document.getElementById('turnContainer')
         this.turnContainer.appendChild(this.turnDisplay)
